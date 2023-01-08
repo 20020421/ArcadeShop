@@ -1,0 +1,29 @@
+.wrapper {
+    // display: flex;
+    background-color: black;
+    min-height: 200vh;
+    padding: 0 20px;
+
+    // font-weight: 700;
+
+    .container {
+        display: flex;
+        margin-top: 98px;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    .header {
+        height: fit-content;
+    }
+
+    .sidebar {
+        flex: 1;
+        background-color: var(--white);
+    }
+
+    .content {
+        flex: 7;
+        background-color: #eceff3;
+    }
+}
