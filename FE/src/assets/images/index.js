@@ -1,5 +1,6 @@
 export const images = {
     logo: require('./logo.svg'),
+    logoBlack: require('./logoblack.svg'),
     bannerImage: require('./imageBanner.png'),
     productImage: require('./products1.png'),
     productImage2: require('./products2.png'),

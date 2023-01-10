@@ -130,4 +130,15 @@ const publicRoutes = [
 
 const privateRoutes = [];
 
-export { publicRoutes, privateRoutes };
+const dashboardRoutes = [
+    {
+        path:  '/',
+        component: StoreProducts
+    },
+    {
+        path:  routes.dashboardStoreProducts.products,
+        component: StoreProducts
+    }
+]
+
+export { publicRoutes, privateRoutes, dashboardRoutes };

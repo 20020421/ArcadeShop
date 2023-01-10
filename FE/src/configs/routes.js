@@ -13,8 +13,16 @@ const routes = {
     crud_page: '/crud/:entity',
     login_page: '/login',
     dashboard: '/dashboard/*',
-    // dashboardStoreProducts: '/dashboard/products',
-    // dashboardOrders: '/dashboard/orders',
+    dashboardStoreProducts: {
+        products: '/store-products/products',
+        inventory: '/store-products/inventory',
+        categories: '/store-products/categories'
+    },
+    dashboardOrders: {
+        orders: '/orders',
+        abandonedCarts: '/orders/abandoned-carts'
+    },
+    
     no_match: '*',
 };
 

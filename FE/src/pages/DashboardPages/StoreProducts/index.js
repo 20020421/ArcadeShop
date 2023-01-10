@@ -1,20 +1,116 @@
 import classNames from 'classnames/bind';
 import style from './StoreProducts.module.scss';
-import { Editor } from 'react-draft-wysiwyg';
-import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-import DashboardBtn from '../../../components/DashboardBtn';
-import { faPlus, faFilter, faSearch, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
-
+import { faFilter, faMagnifyingGlass, faPenToSquare, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { Button, Space, Switch, Table } from 'antd';
 import ViewSelect from './ViewSelect';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { PlusOutlined, MoreOutlined } from '@ant-design/icons';
+import Tippy from '@tippyjs/react/headless';
+import 'tippy.js/dist/tippy.css';
+import { faClone } from '@fortawesome/free-regular-svg-icons';
 
 const cx = classNames.bind(style);
+const columns = [
+    {
+        title: ' ',
+        dataIndex: 'image',
+        key: 'image',
+    },
+    {
+        title: 'Name',
+        dataIndex: 'name',
+        key: 'image'
+    },
+    {
+        title: 'Type',
+        dataIndex: 'type',
+        key: 'type'
+    },
+    {
+        title: 'SKU',
+        dataIndex: 'sku',
+        key: 'sku'
+    },
+    {
+        title: 'Price',
+        dataIndex: 'price',
+        key: 'price'
+    },
+    {
+        title: 'Inventory',
+        dataIndex: 'inventory',
+        key: 'inventory'
+    },
+    {
+        title: 'Action',
+        key: 'action',
+        render: (_, record) => (
+            <Space size="middle">
+                <Actions />
+            </Space>
+        ),
+    },
+];
+const data = [];
+for (let i = 0; i < 46; i++) {
+    data.push({
+        key: i,
+        name: `Edward King ${i}`,
+        type: 'Physical',
+        sku: '0001',
+        price: 900,
+        inventory: 'In Stock'
+
+    });
+}
 
 function StoreProducts() {
     const searchRef = useRef();
 
     const [focused, setFocused] = useState(false);
+    const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+    const onSelectChange = (newSelectedRowKeys) => {
+        console.log('selectedRowKeys changed: ', newSelectedRowKeys);
+        setSelectedRowKeys(newSelectedRowKeys);
+    };
+    const rowSelection = {
+        selectedRowKeys,
+        onChange: onSelectChange,
+        selections: [
+            Table.SELECTION_ALL,
+            Table.SELECTION_INVERT,
+            Table.SELECTION_NONE,
+            {
+                key: 'odd',
+                text: 'Select Odd Row',
+                onSelect: (changableRowKeys) => {
+                    let newSelectedRowKeys = [];
+                    newSelectedRowKeys = changableRowKeys.filter((_, index) => {
+                        if (index % 2 !== 0) {
+                            return false;
+                        }
+                        return true;
+                    });
+                    setSelectedRowKeys(newSelectedRowKeys);
+                },
+            },
+            {
+                key: 'even',
+                text: 'Select Even Row',
+                onSelect: (changableRowKeys) => {
+                    let newSelectedRowKeys = [];
+                    newSelectedRowKeys = changableRowKeys.filter((_, index) => {
+                        if (index % 2 !== 0) {
+                            return true;
+                        }
+                        return false;
+                    });
+                    setSelectedRowKeys(newSelectedRowKeys);
+                },
+            },
+        ],
+    };
 
     return (
         <div className={cx('wrapper')}>
@@ -26,9 +122,9 @@ function StoreProducts() {
                 </div>
                 <div className={cx('option')}>
                     <div className={cx('btn-add')}>
-                        <DashboardBtn to="/dashboard/products/new-product" primary={true} icon={faPlus}>
+                        <Button type="primary" shape="round" icon={<PlusOutlined />} size='large'>
                             New Product
-                        </DashboardBtn>
+                        </Button>
                     </div>
                 </div>
             </div>
@@ -63,9 +159,66 @@ function StoreProducts() {
                         </div>
                     </div>
                 </div>
+                <Table rowSelection={rowSelection} sticky={true} columns={columns} dataSource={data} />
             </div>
         </div>
     );
 }
+
+function Actions() {
+
+    const [show, setShow] = useState(false);
+
+    const handleShowClick = () => {
+        setShow(!show);
+    }
+
+    const ref = useRef(null);
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (ref.current && !ref.current.contains(event.target)) {
+                setShow(false)
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        }
+    }, [ref])
+
+
+    return (<div className={cx('actions')} ref={ref}>
+        <div className={cx('btn')} onClick={handleShowClick}>
+            <MoreOutlined />
+        </div>
+        <div className={cx('popup', [show ? 'show' : ''])}>
+            <div className={cx('arrow')} />
+            <div className={cx('content')}>
+                <div className={cx('action')}>
+                    <div className={cx('icon')}><FontAwesomeIcon icon={faPenToSquare} /></div>
+
+                    <span>Edit</span>
+                </div>
+                <div className={cx('action')}>
+                    <div className={cx('icon')}><FontAwesomeIcon icon={faClone} /></div>
+                    <span>Duplicate</span>
+                </div>
+                <div className={cx('action')}>
+                    <div className={cx('icon')}><FontAwesomeIcon icon={faTrash} /></div>
+                    <span>Delete</span>
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </div>);
+}
+
+
 
 export default StoreProducts;
