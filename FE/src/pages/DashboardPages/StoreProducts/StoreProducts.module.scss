@@ -1,5 +1,11 @@
 .wrapper {
     padding: 20px 50px;
+
+    .image {
+        width: 48px;
+        height: 48px;
+        border-radius: 10px;
+    }
     
 
     .top {
@@ -121,7 +127,7 @@
             position: relative;
             .btn {
                 transform: rotate(90deg);
-                border: 1px solid black;
+                border: 1px solid #056af89d;
                 width: 30px;
                 height: 30px;
                 display: flex;
@@ -129,6 +135,15 @@
                 align-items: center;
                 border-radius: 50%;
                 cursor: pointer;
+
+                color: #056af8;
+
+                transition: background-color .15s ease-out;
+
+                &:hover {
+                    color: var(--white);
+                    background-color: #056af89a;
+                }
             }
 
             .popup {
@@ -166,7 +181,7 @@
                     cursor: pointer;
                     z-index: 2;
                     span {
-                        font-size: 1.6rem;
+                        font-size: 1.4rem;
                         font-weight: normal;
                     }
                     .icon {
@@ -190,3 +205,5 @@
         }
     }
 }
+
+

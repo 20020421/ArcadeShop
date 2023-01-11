@@ -1,10 +1,14 @@
 package com.monopoco.arcade;
 
-import com.monopoco.arcade.entity.Category;
 import com.monopoco.arcade.entity.Role;
 import com.monopoco.arcade.modal.UserDTO;
 import com.monopoco.arcade.service.productservice.ProductService;
 import com.monopoco.arcade.service.userservice.UserService;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeIn;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
+import io.swagger.v3.oas.annotations.info.Info;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.config.Configuration;
 import org.modelmapper.convention.MatchingStrategies;
@@ -19,6 +23,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 
 @SpringBootApplication
+
+
 public class ArcadeApplication {
 
 	public static void main(String[] args) {
@@ -40,7 +46,7 @@ public class ArcadeApplication {
 		return new BCryptPasswordEncoder();
 	}
 	@Bean
-	CommandLineRunner run(UserService userService) {
+	CommandLineRunner run(UserService userService, ProductService productService) {
 		return args -> {
 			userService.addNewRole(new Role(null, "ROLE_USER"));
 			userService.addNewRole(new Role(null, "ROLE_ADMIN"));
@@ -53,6 +59,22 @@ public class ArcadeApplication {
 			userService.addNewUser(new UserDTO(null, "Huy", "Nguyễn", "test@gmail.com", "12345", "0948278731", "https://i.pinimg.com/564x/ed/a9/f0/eda9f0636b7084611ecb5d4608a5dc2e.jpg", new HashSet<>()));
 			userService.addRoleToUser("test@gmail.com", "ROLE_USER");
 
+			productService.saveCategory("Best Sellers");
+			productService.saveCategory("Accessories");
+			productService.saveCategory("Consoles");
+			productService.saveCategory("Controllers");
+			productService.saveCategory("Games");
+			productService.saveCategory("On Sale");
+
+			productService.saveDiscountMode("PERCENT");
+			productService.saveDiscountMode("AMOUNT");
+
+			productService.saveInventory("In stock");
+			productService.saveInventory("Out of stock");
+
+			productService.saveAdditionalInfoTitle("Product Info");
+			productService.saveAdditionalInfoTitle("Return and Refund Policy");
+			productService.saveAdditionalInfoTitle("Shipping Info");
 
 
 

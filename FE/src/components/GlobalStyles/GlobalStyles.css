@@ -105,6 +105,10 @@ html *::-webkit-scrollbar-track {
         animation: none !important;
     }
 }
+.ant-table-tbody > tr.ant-table-row:hover > td,
+.ant-table-tbody > tr > td.ant-table-cell-row-hover {
+  background-color: rgba(66, 135, 240, 0.411) !important;
+}
 
 @font-face {
     font-family: Madefor;

@@ -9,18 +9,24 @@ import { PlusOutlined, MoreOutlined } from '@ant-design/icons';
 import Tippy from '@tippyjs/react/headless';
 import 'tippy.js/dist/tippy.css';
 import { faClone } from '@fortawesome/free-regular-svg-icons';
-
+import {images} from "../../../assets/images"
 const cx = classNames.bind(style);
 const columns = [
     {
         title: ' ',
         dataIndex: 'image',
         key: 'image',
+        width: 100,
+        render: (_, record) => {
+            console.log(record);
+            return (<img className={cx('image')} src={record.image} alt='logo' />)
+        },
     },
     {
         title: 'Name',
         dataIndex: 'name',
-        key: 'image'
+        key: 'image',
+        sorter: true
     },
     {
         title: 'Type',
@@ -35,7 +41,8 @@ const columns = [
     {
         title: 'Price',
         dataIndex: 'price',
-        key: 'price'
+        key: 'price',
+        sorter: true
     },
     {
         title: 'Inventory',
@@ -57,9 +64,10 @@ for (let i = 0; i < 46; i++) {
     data.push({
         key: i,
         name: `Edward King ${i}`,
+        image: images.gameImage1,
         type: 'Physical',
         sku: '0001',
-        price: 900,
+        price: 900 + i,
         inventory: 'In Stock'
 
     });

@@ -1,35 +1,38 @@
 package com.monopoco.arcade.requestbody;
 
-import com.monopoco.arcade.entity.Brand;
-import com.monopoco.arcade.entity.Category;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
-import javax.persistence.ManyToOne;
 import java.time.Year;
+import java.util.Map;
+import java.util.Set;
 
-@Data
+@Setter
+@Getter
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 public class ProductRequest {
 
-    private Long id;
+    private String name;
 
-    private String productName;
-
-    private Double listedPrice;
-
-    private Year modelYear;
+    private String ribbon;
 
     private String description;
 
-    private String image;
+    private Set<String> categories;
 
-    private String categoryName;
+    private boolean visible;
 
-    private String brandName;
+    private Set<Long> imagesId;
+
+    private Map<String, String> additionalInfo;
+
+    private Double price;
+
+    private String discountMode;
+
+    private String discountValue;
+
+    private String SKU;
+    private String inventoryStatus;
 }

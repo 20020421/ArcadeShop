@@ -1,9 +1,9 @@
 package com.monopoco.arcade.repository;
 
-import com.monopoco.arcade.entity.Product;
+import com.monopoco.arcade.entity.Inventory;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ProductRepository extends JpaRepository<Product, Long> {
+public interface InventoryRepository extends JpaRepository<Inventory, String> {
 }

@@ -8,6 +8,11 @@ import com.monopoco.arcade.entity.User;
 import com.monopoco.arcade.modal.UserDTO;
 import com.monopoco.arcade.principal.UserPrincipal;
 import com.monopoco.arcade.service.userservice.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeIn;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -23,11 +28,13 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 @RestController
 @RequestMapping("/api")
 @Slf4j
+@SecurityRequirement(name = "Bearer Authentication")
 public class UserController {
 
     @Autowired
     private UserService service;
 
+    @Operation(summary = "Get user", description = "Get user")
     @GetMapping("/users")
     public ResponseEntity<?> getAllUser() {
         return ResponseEntity.ok().body(service.getAllUser());

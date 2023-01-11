@@ -1,125 +1,69 @@
 package com.monopoco.arcade.service.productservice;
 
-import com.monopoco.arcade.entity.Brand;
+import com.monopoco.arcade.entity.AdditionalInfoTitle;
 import com.monopoco.arcade.entity.Category;
-import com.monopoco.arcade.entity.Product;
-import com.monopoco.arcade.repository.BrandRepository;
-import com.monopoco.arcade.repository.CategoryRepository;
-import com.monopoco.arcade.repository.ProductRepository;
-import lombok.extern.slf4j.Slf4j;
+import com.monopoco.arcade.entity.DiscountMode;
+import com.monopoco.arcade.entity.Inventory;
+import com.monopoco.arcade.repository.*;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.ModelMap;
 
-import java.util.List;
-
+import javax.transaction.Transactional;
+import java.util.Optional;
 
 @Service
 @Transactional
-@Slf4j
-public class ProductServiceImpl implements ProductService{
-
-    @Autowired
-    private BrandRepository brandRepository;
+public class ProductServiceImpl implements ProductService {
 
     @Autowired
     private CategoryRepository categoryRepository;
 
     @Autowired
+    private InventoryRepository inventoryRepository;
+
+    @Autowired
+    private AdditionalInfoTitleRepository additionalInfoTitleRepository;
+
+    @Autowired
+    private DiscountModeRepository discountModeRepository;
+
+    @Autowired
     private ProductRepository productRepository;
 
-
+    @Autowired
+    private ModelMapper modelMapper;
     @Override
-    public Brand addNewBrand(Brand brand) {
-
-        boolean isExist = brandRepository.findByBrandName(brand.getBrandName()) != null;
-        if (!isExist) {
-            log.info("Adding new brand : {}" , brand.getBrandName());
-            return brandRepository.save(brand);
+    public String saveCategory(String categoryName) {
+        Category category = new Category(categoryName.toUpperCase(),categoryName, null, null);
+        Category categorySaved = categoryRepository.save(category);
+        if (categorySaved != null) {
+            return categorySaved.getId();
         } else {
-            log.warn("The brand has exist...");
+            return "Fail to save new category";
         }
-        return null;
     }
 
     @Override
-    public Category addNewCategory(Category category) {
-        boolean isExist = categoryRepository.findByCategoryName(category.getCategoryName()) != null;
-        if (!isExist) {
-            log.info("Adding new category : {}", category.getCategoryName());
-            return categoryRepository.save(category);
-        } else {
-            log.warn("The category {} has exits");
-        }
-        return null;
+    public String saveAdditionalInfoTitle(String title) {
+        AdditionalInfoTitle additionalInfoTitle = new AdditionalInfoTitle(title.toUpperCase(), title);
+        AdditionalInfoTitle additionalInfoTitleSaved = additionalInfoTitleRepository.save(additionalInfoTitle);
+        return additionalInfoTitleSaved.getId();
     }
 
     @Override
-    public Product addNewProduct(Product product) {
-
-        Product savedProduct = productRepository.save(product);
-
-        if (savedProduct == null) {
-            log.warn("Product {} has exist", product.getProductName());
-        } else {
-            log.info("Adding new product: {}", product.getProductName());
-            return savedProduct;
-        }
-
-        return null;
+    public String saveDiscountMode(String mode) {
+        DiscountMode discountMode = new DiscountMode(mode.toUpperCase(), mode, null);
+        DiscountMode discountModeSaved = discountModeRepository.save(discountMode);
+        return discountModeSaved.getId();
     }
 
     @Override
-    public List<Product> getAllProduct() {
-        return productRepository.findAll();
+    public String saveInventory(String inventory) {
+        Inventory inventoryE = new Inventory(inventory.toUpperCase(), inventory, null);
+        Inventory inventorySaved = inventoryRepository.save(inventoryE);
+
+        return inventorySaved.getId();
     }
-
-    @Override
-    public Product getProductByName(String productName) {
-        return productRepository.findByProductName(productName);
-    }
-
-    @Override
-    public Product getProductById(Long id) {
-        Product product = productRepository.findById(id).get();
-
-        return product;
-    }
-
-    @Override
-    public List<Product> getProductsByBrand(String brandName) {
-        return productRepository.findAllByBrand_BrandName(brandName);
-    }
-
-    @Override
-    public List<Product> getProductsByCategory(String categoryName) {
-        return productRepository.findAllByCategory_CategoryName(categoryName);
-    }
-
-    @Override
-    public void addCategoryToProduct(String productName, String categoryName) {
-        Category category = categoryRepository.findByCategoryName(categoryName);
-        if (category == null) {
-            category = categoryRepository.save(new Category(null, categoryName));
-        }
-
-        Product product = productRepository.findByProductName(productName);
-
-        product.setCategory(category);
-    }
-
-    @Override
-    public void addBrandToProduct(String productName, String brandName) {
-        Brand brand = brandRepository.findByBrandName(brandName);
-
-        if (brand == null) {
-            brand = brandRepository.save(new Brand(null, brandName));
-        }
-
-        Product product = productRepository.findByProductName(productName);
-
-        product.setBrand(brand);
-    }
-
-
 }

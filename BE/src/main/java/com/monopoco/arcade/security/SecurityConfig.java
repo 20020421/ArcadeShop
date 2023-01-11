@@ -9,6 +9,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -35,7 +36,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
+        auth.inMemoryAuthentication()
+                .withUser("hung")
+                .password(passwordEncoder.encode("hung"))
+                .authorities("ADMIN");
+
     }
+
+//    @Override
+//    public void configure(WebSecurity web) throws Exception {
+//        web.ignoring().antMatchers("/swagger-ui/**", "/v3/api-docs/**");
+//    }
+
+
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -55,6 +68,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //        http.authorizeHttpRequests().antMatchers(GET, "/api/users/**").permitAll();
         http.authorizeHttpRequests().antMatchers(POST, "/api/products/**").permitAll();
         http.authorizeHttpRequests().antMatchers(GET, "/api/products/**").permitAll();
+        http.authorizeHttpRequests().antMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll();
+
 
 
 

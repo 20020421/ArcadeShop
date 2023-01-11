@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Table(name = "caregories")
 @Entity
@@ -14,11 +15,17 @@ import javax.persistence.*;
 @NoArgsConstructor
 public class Category {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
 
     @Column(name = "category_name", unique = true)
     private String categoryName;
+
+    @ManyToMany(mappedBy = "categories")
+    private Set<Product> products;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "image_id", referencedColumnName = "id")
+    private Image image;
 
 
 }
